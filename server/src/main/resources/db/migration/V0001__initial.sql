@@ -1,3 +1,4 @@
+--CREATE SCHEMA webauthn;
 CREATE TABLE app_user (
     id                      BIGINT NOT NULL AUTO_INCREMENT,
     username                VARCHAR(255) NOT NULL, 

@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -28,14 +29,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.csrf(customizer -> customizer.disable()).logout(customizer -> {
+    http.csrf(AbstractHttpConfigurer::disable).logout(customizer -> {
       customizer.logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
       customizer.deleteCookies("JSESSIONID");
     }).authorizeRequests(customizer -> {
-      customizer.antMatchers("/registration/*", "/assertion/*").permitAll();
+      customizer.antMatchers("/registration/*", "/assertion/*", "/h2-console/*").permitAll();
       customizer.anyRequest().authenticated();
     }).exceptionHandling(customizer -> customizer
         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
+
+    http.headers().frameOptions().disable();
   }
 
   @Bean

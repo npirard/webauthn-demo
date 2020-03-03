@@ -45,7 +45,8 @@ public class Webauthn extends SchemaImpl {
    * No further instances allowed
    */
   private Webauthn() {
-    super("webauthn", null);
+    //super("webauthn", null);
+    super("", null);
   }
 
   /**
